@@ -68,8 +68,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .developerMessage(ex.getClass().getName())
                 .build();
 
-        System.out.println(status);
-
         return new ResponseEntity(exceptionDetails, headers, status);
     }
 
