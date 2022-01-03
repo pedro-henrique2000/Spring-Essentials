@@ -60,6 +60,7 @@ public class AnimeController {
     }
 
     @GetMapping("by-id/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Anime> listById(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
         log.info(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()));
 
