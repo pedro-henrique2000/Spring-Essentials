@@ -34,6 +34,8 @@ public class AnimeController {
     public ResponseEntity<Page<Anime>> list(Pageable pageable) {
         log.info(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()));
 
+        log.info("teste");
+
         return ResponseEntity.ok(animeService.listAll(pageable));
     }
 
