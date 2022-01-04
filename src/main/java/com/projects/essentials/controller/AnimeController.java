@@ -60,7 +60,6 @@ public class AnimeController {
     }
 
     @GetMapping("by-id/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Anime> listById(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
         log.info(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()));
 
@@ -69,17 +68,14 @@ public class AnimeController {
         return ResponseEntity.ok(animeService.findByIdOrThrowNotFoundException(id));
     }
 
-    
-
     @PostMapping()
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Anime> saveAnime(@RequestBody @Valid AnimePostRequestBody anime) {
         log.info(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()));
 
         return ResponseEntity.status(HttpStatus.CREATED.value()).body(animeService.save(anime));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("admin/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         log.info(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()));
 
