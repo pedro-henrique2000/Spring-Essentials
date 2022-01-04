@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EnableWebSecurity
@@ -16,24 +17,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
     private DevdojoUserDetailsService devdojoUserDetailsService;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        log.info("Password encoded: {}", passwordEncoder.encode("123"));
-
-//        auth
-//                .inMemoryAuthentication()
-//                .withUser("Pedro")
-//                .password(passwordEncoder.encode("user"))
-//                .roles("USER", "ADMIN")
-//                .and()
-//                .withUser("User")
-//                .password(passwordEncoder.encode("pass"))
-//                .roles("USER");
+        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        log.info("Encoded {}", passwordEncoder.encode("123"));
 
         auth.userDetailsService(devdojoUserDetailsService)
                 .passwordEncoder(passwordEncoder);
@@ -51,6 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/animes/**").hasRole("USER")
                 .anyRequest()
                 .authenticated()
+                .and()
+                .formLogin()
                 .and()
                 .httpBasic();
     }

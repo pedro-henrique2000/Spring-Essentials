@@ -4,7 +4,9 @@ import com.projects.essentials.domain.Anime;
 import com.projects.essentials.requests.AnimePostRequestBody;
 import com.projects.essentials.service.AnimeService;
 import com.projects.essentials.util.DateUtil;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.log4j.Log4j2;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,10 +33,8 @@ public class AnimeController {
     private AnimeService animeService;
 
     @GetMapping
-    public ResponseEntity<Page<Anime>> list(Pageable pageable) {
+    public ResponseEntity<Page<Anime>> list(@ParameterObject Pageable pageable) {
         log.info(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()));
-
-        log.info("teste");
 
         return ResponseEntity.ok(animeService.listAll(pageable));
     }
