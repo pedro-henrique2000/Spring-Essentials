@@ -3,6 +3,8 @@ server:
     include-stacktrace: on_param
 
 spring:
+  application:
+    name: Spring Boot Essesntials 2
   datasource:
     url: jdbc:mysql://localhost:3306/anime?createDatabaseIfNotExist=true
     username: root
@@ -10,3 +12,13 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, metrics, prometheus
+
+info:
+  app: Spring Boot Essentials
+  github: https://github.com/phb2000
