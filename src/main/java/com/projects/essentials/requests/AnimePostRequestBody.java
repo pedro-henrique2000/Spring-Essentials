@@ -17,6 +17,4 @@ public class AnimePostRequestBody {
     @NotBlank(message = "name is invalid")
     @Schema(description = "Anime's Name", example = "Naruto")
     private String name;
-
-
 }
