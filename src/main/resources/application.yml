@@ -3,6 +3,8 @@ server:
     include-stacktrace: on_param
 
 spring:
+  application:
+    name: Spring Boot Essesntials 2
   datasource:
     url: jdbc:mysql://localhost:3306/anime?createDatabaseIfNotExist=true
     username: root

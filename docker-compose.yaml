@@ -22,12 +22,19 @@ services:
 
   app:
     image: phpmyadmin/phpmyadmin:latest
+    container_name: PhpMyAdmin
     links:
       - db
     ports:
       - 80:80
     environment:
       - PMA_ARBITRARY=1
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
 
 volumes:
   projects_data:
