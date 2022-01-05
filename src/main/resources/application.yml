@@ -10,3 +10,13 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, metrics
+
+info:
+  app: Spring Boot Essentials
+  github: https://github.com/phb2000
