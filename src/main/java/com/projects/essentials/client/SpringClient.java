@@ -3,7 +3,6 @@ package com.projects.essentials.client;
 import com.projects.essentials.domain.Anime;
 import com.projects.essentials.requests.AnimePostRequestBody;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.http.client.support.BasicAuthenticationInterceptor;
@@ -19,29 +18,30 @@ public class SpringClient {
 
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setErrorHandler(new RestTemplateResponseHandler());
+        restTemplate.getInterceptors().add(new RequestLoggingInterceptor());
         restTemplate.getInterceptors().add(new BasicAuthenticationInterceptor("pedro", "123"));
 
         ResponseEntity<Anime> entity = restTemplate.getForEntity("http://localhost:8080/animes/13", Anime.class);
         log.info(entity);
 
-        Anime object = new RestTemplate().getForObject("http://localhost:8080/animes/13", Anime.class);
+        Anime object = restTemplate.getForObject("http://localhost:8080/animes/13", Anime.class);
         log.info(object);
 
-        Anime[] animes = new RestTemplate().getForObject("http://localhost:8080/animes/all", Anime[].class);
+        Anime[] animes = restTemplate.getForObject("http://localhost:8080/animes/all", Anime[].class);
         log.info(Arrays.toString(animes));
 
-        ResponseEntity<List<Anime>> animesList = new RestTemplate().exchange("http://localhost:8080/animes/all", HttpMethod.GET, null, new ParameterizedTypeReference<List<Anime>>() {
+        ResponseEntity<List<Anime>> animesList = restTemplate.exchange("http://localhost:8080/animes/all", HttpMethod.GET, null, new ParameterizedTypeReference<List<Anime>>() {
         });
         log.info(animesList.getBody());
 
         AnimePostRequestBody animePostRequestBody = AnimePostRequestBody.builder().name("Fullmetal").build();
 
         Anime anime =
-                new RestTemplate().postForObject("http://localhost:8080/animes/", animePostRequestBody, Anime.class);
+                restTemplate.postForObject("http://localhost:8080/animes/", animePostRequestBody, Anime.class);
 
         log.info("Post {}", anime);
 
-        ResponseEntity<Anime> responseEntity = new RestTemplate()
+        ResponseEntity<Anime> responseEntity = restTemplate
                 .exchange("http://localhost:8080/animes/", HttpMethod.POST,
                         new HttpEntity<>(animePostRequestBody, createJsonHeader()),
                         Anime.class);
@@ -50,7 +50,7 @@ public class SpringClient {
 
         AnimePostRequestBody animeToUpdate = AnimePostRequestBody.builder().name("Update").build();
 
-        ResponseEntity<Void> responseEntityPut = new RestTemplate()
+        ResponseEntity<Void> responseEntityPut = restTemplate
                 .exchange("http://localhost:8080/animes/{id}", HttpMethod.PUT,
                         new HttpEntity<>(animeToUpdate, createJsonHeader()),
                         Void.class, "17");
@@ -59,7 +59,7 @@ public class SpringClient {
 
         String idToDelete = "18";
 
-        ResponseEntity<Void> responseEntityDelete = new RestTemplate()
+        ResponseEntity<Void> responseEntityDelete = restTemplate
                 .exchange("http://localhost:8080/animes/{id}", HttpMethod.DELETE,
                         new HttpEntity<>(animeToUpdate, createJsonHeader()),
                         Void.class, idToDelete);
